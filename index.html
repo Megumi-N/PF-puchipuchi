@@ -8,66 +8,110 @@
     <style>
       * {
         margin: 0;
-        padding: 0;
-      }
-      #wrapper_puchi {
-        margin-left: 10vw;
-        margin-right: 10vw;
-        background-color: greenyellow;
-        width: 80vw;
-      }
-      img {
-        width: 10%;
-        height: 10%;
-        vertical-align: bottom; /* 画像下に現れる余白を消す */
       }
     </style>
   </head>
   <body>
-    <div id="wrapper_puchi"></div>
+    <canvas id="canvas"></canvas>
     <script>
-      const fragment = document.createDocumentFragment();
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      CANVAS_WIDTH = window.innerWidth;
+      CANVAS_HEIGHT = window.innerHeight;
 
-      const a = new Audio();
-      a.src = "./puchipuchi.mp3";
-
-      const wrapper = document.getElementById("wrapper_puchi");
-      const puchi = document.createElement("img");
-      let images = [];
-
-      for (let i = 0; i < 100; ++i) {
-        images.push(i);
+      // audioを事前にロードしておく
+      const audios = { itemget: new Audio("./puchipuchi.mp3") };
+      for (var i in audios) {
+        audios[i].load();
       }
-      images.forEach((image) => {
-        let img = document.createElement("img");
-        img.src = "./puchipuchi.png";
-        img.id = image;
-        img.classList = "puchi";
-        fragment.appendChild(img);
-      });
 
-      wrapper.appendChild(fragment);
+      //  円オブジェクトのクラス
+      class Circle {
+        // 初期
+        constructor(x, y, r) {
+          this.x = x;
+          this.y = y;
+          this.r = r;
+        }
 
-      const puchiImage = document.getElementsByTagName("img");
+        draw(ctx) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, true);
+          ctx.fillStyle = "#b3f0df";
+          ctx.fill();
+          ctx.restore();
+        }
 
-      document.addEventListener(
-        "DOMContentLoaded",
-        function () {
-          function menuClick(e) {
-            console.log(e);
-            a.currentTime = 0; // 連続音楽
-            a.play();
-          }
+        clicked(ctx) {
+          audios["itemget"].currentTime = 0; // 連続音楽
+          audios["itemget"].play();
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, true);
+          ctx.fillStyle = "#5c9887";
+          ctx.fill();
+          ctx.restore();
+          setTimeout(() => {
+            ctx.fillStyle = "#b3f0df";
+            ctx.fill();
+            ctx.restore();
+          }, 20);
+        }
 
-          // 引数に指定したclassの値をもつ要素をすべて取得
-          const menus = document.getElementsByClassName("puchi");
-          // 上記で取得したすべての要素に対してクリックイベントを適用
-          for (let i = 0; i < images.length; i++) {
-            menus[i].addEventListener("click", menuClick, false);
-          }
-        },
-        false
-      );
+        testHit(point) {
+          return (
+            // ピラゴラスの定理をつかってユークリッド距離と半径で判定する
+            // ユークリッド距離はx点とy点の直線距離のこと
+            // 半径の面積の方が大きいことで、円の中に座標があることがわかるので、面積より大きかった場合
+            // 結果がfalseとなり、クリックイベントは発生しなくなる
+            Math.pow(this.x - point.x, 2) + Math.pow(this.y - point.y, 2) <=
+            Math.pow(this.r, 2)
+          );
+        }
+      }
+
+      // main処理
+      const main = () => {
+        canvas.width = CANVAS_WIDTH;
+        canvas.height = CANVAS_HEIGHT;
+
+        ctx.save();
+        ctx.fillStyle = "pink";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+
+        const items = [];
+        const array = [1];
+
+        array.forEach((i) => {
+          let x = canvas.width / 2;
+          let y = (canvas.height / 2) * i;
+
+          const circle = new Circle(x, y, 200);
+          items.push(circle);
+        });
+
+        // オブジェクトを描画する
+        items.forEach((item) => item.draw(ctx));
+
+        canvas.addEventListener("click", (e) => {
+          // マウスの座標をCanvas内の座標とあわせるため
+          const rect = canvas.getBoundingClientRect();
+          const point = {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
+          };
+
+          items.forEach((item) => {
+            if (item.testHit(point)) {
+              item.clicked(ctx);
+            }
+          });
+        });
+      };
+
+      main();
     </script>
   </body>
 </html>
