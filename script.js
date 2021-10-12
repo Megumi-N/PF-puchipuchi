@@ -10,7 +10,7 @@ let img;
 let div;
 let audio;
 const music = new Audio();
-music.src = "./puchipuchi.mp3";
+music.src = "./audio/puchipuchi.mp3";
 
 const puchiImage = document.getElementsByTagName("img");
 
@@ -45,7 +45,7 @@ images.forEach((image) => {
   div = document.createElement("div");
   audio = document.createElement("audio");
 
-  img.src = "./before.png";
+  img.src = "./images/before.png";
   img.id = image;
   img.classList = "puchi";
   img.setAttribute("onclick", "");
@@ -69,7 +69,7 @@ document.addEventListener(
 
         e.path[1].children[1].play();
 
-        e.path[0].src = "./after.png";
+        e.path[0].src = "./images/after.png";
         // e.path[1].children[1]
         e.path[1].children[1].addEventListener("ended", () => {
           document.getElementById(`puchi_audio${e.path[0].id}`).remove();
