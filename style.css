@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background-color: #9a9994;
+}
+
+main {
+  margin: 40% 0;
+  padding: 0;
+  width: 100vw;
+}
+
+#wrapper_puchi {
+  margin-left: 10vw;
+  margin-right: 10vw;
+  width: 80vw;
+  /* padding: 1vw; */
+  overflow: hidden;
+}
+
+img {
+  width: 8vw;
+  vertical-align: bottom; /* 画像下に現れる余白を消す */
+  float: left;
+}
+
+#text {
+  text-align: center;
+  font-size: 5em;
+}

@@ -4,114 +4,59 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <style>
-      * {
-        margin: 0;
-      }
-    </style>
+    <title>プチプチするだけのアプリ。</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <canvas id="canvas"></canvas>
-    <script>
-      const canvas = document.getElementById("canvas");
-      const ctx = canvas.getContext("2d");
-      CANVAS_WIDTH = window.innerWidth;
-      CANVAS_HEIGHT = window.innerHeight;
+    <main>
+      <div id="wrapper_puchi"></div>
+      <div id="text">10秒</div>
+    </main>
 
-      // audioを事前にロードしておく
-      const audios = { itemget: new Audio("./puchipuchi.mp3") };
-      for (var i in audios) {
-        audios[i].load();
-      }
-
-      //  円オブジェクトのクラス
-      class Circle {
-        // 初期
-        constructor(x, y, r) {
-          this.x = x;
-          this.y = y;
-          this.r = r;
-        }
-
-        draw(ctx) {
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, true);
-          ctx.fillStyle = "#b3f0df";
-          ctx.fill();
-          ctx.restore();
-        }
-
-        clicked(ctx) {
-          audios["itemget"].currentTime = 0; // 連続音楽
-          audios["itemget"].play();
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, true);
-          ctx.fillStyle = "#5c9887";
-          ctx.fill();
-          ctx.restore();
-          setTimeout(() => {
-            ctx.fillStyle = "#b3f0df";
-            ctx.fill();
-            ctx.restore();
-          }, 20);
-        }
-
-        testHit(point) {
-          return (
-            // ピラゴラスの定理をつかってユークリッド距離と半径で判定する
-            // ユークリッド距離はx点とy点の直線距離のこと
-            // 半径の面積の方が大きいことで、円の中に座標があることがわかるので、面積より大きかった場合
-            // 結果がfalseとなり、クリックイベントは発生しなくなる
-            Math.pow(this.x - point.x, 2) + Math.pow(this.y - point.y, 2) <=
-            Math.pow(this.r, 2)
-          );
-        }
-      }
-
-      // main処理
-      const main = () => {
-        canvas.width = CANVAS_WIDTH;
-        canvas.height = CANVAS_HEIGHT;
-
-        ctx.save();
-        ctx.fillStyle = "pink";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.restore();
-
-        const items = [];
-        const array = [1];
-
-        array.forEach((i) => {
-          let x = canvas.width / 2;
-          let y = (canvas.height / 2) * i;
-
-          const circle = new Circle(x, y, 200);
-          items.push(circle);
-        });
-
-        // オブジェクトを描画する
-        items.forEach((item) => item.draw(ctx));
-
-        canvas.addEventListener("click", (e) => {
-          // マウスの座標をCanvas内の座標とあわせるため
-          const rect = canvas.getBoundingClientRect();
-          const point = {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-          };
-
-          items.forEach((item) => {
-            if (item.testHit(point)) {
-              item.clicked(ctx);
-            }
-          });
-        });
-      };
-
-      main();
-    </script>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="staticBackdrop"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">
+              プチプチするだけのアプリ。
+            </h5>
+          </div>
+          <div class="modal-body" id="staticBackdropBody">
+            開始。
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              id="btn"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+      crossorigin="anonymous"
+    ></script>
+    <script src="script.js"></script>
   </body>
 </html>
