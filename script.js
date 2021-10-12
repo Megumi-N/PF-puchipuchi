@@ -9,6 +9,8 @@ let images = [];
 let img;
 let div;
 let audio;
+const music = new Audio();
+music.src = "./puchipuchi.mp3";
 
 const puchiImage = document.getElementsByTagName("img");
 
@@ -52,7 +54,7 @@ images.forEach((image) => {
 
   audio.classList = "audio";
   audio.id = `puchi_audio${image}`;
-  audio.src = "./puchipuchi.mp3";
+  audio.src = music.src;
   fragment.appendChild(div).appendChild(img);
   fragment.appendChild(div).appendChild(audio);
 });
@@ -64,6 +66,7 @@ document.addEventListener(
     if (device !== "apple") {
       function menuClick(e) {
         // a.currentTime = 0; // 連続音楽
+
         e.path[1].children[1].play();
 
         e.path[0].src = "./after.png";
