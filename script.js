@@ -31,6 +31,8 @@ images.forEach((image) => {
   img.src = "./before.png";
   img.id = image;
   img.classList = "puchi";
+  img.setAttribute("draggable", true);
+
   div.id = `puchi${image}`;
 
   audio.classList = "audio";

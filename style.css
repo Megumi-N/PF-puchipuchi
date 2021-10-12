@@ -10,21 +10,23 @@ body {
 }
 
 main {
-  margin: 40% 0;
+  margin: 10vh 0;
   padding: 0;
   width: 100vw;
 }
 
 #wrapper_puchi {
-  margin-left: 10vw;
-  margin-right: 10vw;
-  width: 80vw;
-  /* padding: 1vw; */
+  margin-left: 5vw;
+  margin-right: 5vw;
+  width: 90vw;
   overflow: hidden;
 }
 
 img {
-  width: 8vw;
+  user-drag: none;
+  -webkit-user-drag: none;
+  -moz-user-select: none;
+  width: 15vw;
   vertical-align: bottom; /* 画像下に現れる余白を消す */
   float: left;
 }
