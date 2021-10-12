@@ -1,3 +1,5 @@
+let device;
+
 const fragment = document.createDocumentFragment();
 const wrapper = document.getElementById("wrapper_puchi");
 const text = document.getElementById("text");
@@ -19,10 +21,23 @@ const modalBtn = document.getElementById("btn");
 
 const audioTag = document.getElementsByClassName("audio");
 
+// デバイス認証
+const deviceDetect = () => {
+  if (
+    navigator.userAgent.match("iPad") ||
+    navigator.userAgent.match("iPhone")
+  ) {
+    device = "apple";
+    alert("未対応のデバイスです");
+  }
+};
+deviceDetect();
+
 for (let i = 0; i < 50; ++i) {
   images.push(i);
 }
 
+// imgとaudioタグを生成
 images.forEach((image) => {
   img = document.createElement("img");
   div = document.createElement("div");
@@ -31,7 +46,7 @@ images.forEach((image) => {
   img.src = "./before.png";
   img.id = image;
   img.classList = "puchi";
-  img.setAttribute("draggable", true);
+  img.setAttribute("onclick", "");
 
   div.id = `puchi${image}`;
 
@@ -41,38 +56,41 @@ images.forEach((image) => {
   fragment.appendChild(div).appendChild(img);
   fragment.appendChild(div).appendChild(audio);
 });
-
 wrapper.appendChild(fragment);
 
 document.addEventListener(
   "DOMContentLoaded",
-  () => {
-    function menuClick(e) {
-      // a.currentTime = 0; // 連続音楽
-      e.path[1].children[1].play();
-      e.path[0].src = "./after.png";
-      // e.path[1].children[1]
-      e.path[1].children[1].addEventListener(
-        "ended",
-        () => {
+  function () {
+    if (device !== "apple") {
+      function menuClick(e) {
+        // a.currentTime = 0; // 連続音楽
+        e.path[1].children[1].play();
+
+        e.path[0].src = "./after.png";
+        // e.path[1].children[1]
+        e.path[1].children[1].addEventListener("ended", () => {
           document.getElementById(`puchi_audio${e.path[0].id}`).remove();
           if (audioTag.length == 0) {
             myModal.show();
             modalTitle.innerHTML = "クリア！";
-            modalBody.innerHTML = "完了";
+            modalBody.innerHTML = `数々のプチプチを潰してきた猛者だとお見受けします。<br>
+            あなたに泣かされてきたプチプチも数多いことでしょう...。
+            `;
             modalBtn.innerHTML = "再挑戦";
             modalBtn.setAttribute("onclick", "location.reload();");
           }
-        },
-        false
-      );
+        });
+      }
     }
 
     // 引数に指定したclassの値をもつ要素をすべて取得
     const menus = document.getElementsByClassName("puchi");
     // 上記で取得したすべての要素に対してクリックイベントを適用
     for (let i = 0; i < images.length; i++) {
-      menus[i].addEventListener("click", menuClick, false);
+      if (device === "apple") {
+      } else {
+        menus[i].addEventListener("click", menuClick, false);
+      }
     }
   },
   false
@@ -85,8 +103,9 @@ document.getElementById("btn").addEventListener("click", () => {
     if (num == 0) {
       clearInterval(timer);
       myModal.show();
-      modalTitle.innerHTML = "終了";
-      modalBody.innerHTML = "完了";
+      console.log(audioTag.length);
+      modalTitle.innerHTML = "タイムアウト〜〜";
+      modalBody.innerHTML = "ぷちぷちへの愛が感じられませんでした...";
       modalBtn.innerHTML = "再挑戦";
       modalBtn.setAttribute("onclick", "location.reload();");
     }

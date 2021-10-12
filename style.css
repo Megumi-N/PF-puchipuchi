@@ -23,12 +23,14 @@ main {
 }
 
 img {
+  width: 5vw;
+  vertical-align: bottom; /* 画像下に現れる余白を消す */
+  float: left;
   user-drag: none;
   -webkit-user-drag: none;
   -moz-user-select: none;
-  width: 15vw;
-  vertical-align: bottom; /* 画像下に現れる余白を消す */
-  float: left;
+  cursor: pointer;
+  /* pointer-events: none; */
 }
 
 #text {
