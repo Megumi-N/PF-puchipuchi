@@ -7,6 +7,11 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: #9a9994;
+  font-family: Myfont;
+}
+@font-face {
+  font-family: "MyFont";
+  src: url("JKG-L_3.ttf");
 }
 
 main {
@@ -36,4 +41,5 @@ img {
 #text {
   text-align: center;
   font-size: 5em;
+  font-family: Myfont;
 }
